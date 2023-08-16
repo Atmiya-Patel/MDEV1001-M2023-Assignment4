@@ -3,7 +3,6 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class FirestoreCRUDViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var imagelogo : UIImage
 
     @IBOutlet weak var tableView: UITableView!
     var movies: [Movie] = []
