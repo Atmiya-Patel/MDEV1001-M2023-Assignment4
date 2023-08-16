@@ -7,4 +7,7 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var studioLabel: UITextField!
     
     @IBOutlet weak var ratingLabel: UITextField!
+    
+   @IBOutlet weak var posterImageView : UIImageView!
+    
 }

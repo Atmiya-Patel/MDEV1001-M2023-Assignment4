@@ -14,4 +14,5 @@ struct Movie: Codable {
     var shortDescription: String
     var mpaRating: String
     var criticsRating: Double
+    var imageUrl: String
 }
