@@ -68,8 +68,6 @@ class FirestoreCRUDViewController: UIViewController, UITableViewDelegate, UITabl
             cell.ratingLabel.backgroundColor = UIColor.red
             cell.ratingLabel.textColor = UIColor.white
         }
-        let imgData = movie.imgUrl != nil ? UIImage(data: movie.imageUrl) : nil
-        cell.posterImageView ? .image = imgData ?? imagelogo
         return cell
     }
 
