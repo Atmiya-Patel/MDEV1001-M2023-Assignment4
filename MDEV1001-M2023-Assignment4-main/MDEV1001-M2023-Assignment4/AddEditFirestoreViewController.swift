@@ -21,6 +21,10 @@ class AddEditFirestoreViewController: UIViewController {
     @IBOutlet weak var mpaRatingTextField: UITextField!
     @IBOutlet weak var criticsRatingTextField: UITextField!
     
+    @IBOutlet weak var thumbnailImage: UIImageView!
+    
+    @IBOutlet weak var imageUrlTextField: UITextField!
+    
     var movie: Movie?
     var movieViewController: FirestoreCRUDViewController?
     var movieUpdateCallback: (() -> Void)?
@@ -42,7 +46,21 @@ class AddEditFirestoreViewController: UIViewController {
 //            descriptionTextView.text = movie.shortDescription
 //            mpaRatingTextField.text = movie.mpaRating
             criticsRatingTextField.text = "\(movie.criticsRating)"
-            
+            let url = URL(string: movie.thumbnail)!
+
+                              // Fetch Image Data
+                          
+                          DispatchQueue.global().async {
+                                  // Fetch Image Data
+                                  if let data = try? Data(contentsOf: url) {
+                                      DispatchQueue.main.async {
+                                          // Create Image and Update Image View
+                                          self.thumbnailImage.image = UIImage(data: data)
+                                      }
+                                  }
+                              }
+
+            imageUrlTextField.text = movie.thumbnail
             AddEditTitleLabel.text = "Edit Movie"
             UpdateButton.setTitle("Update", for: .normal)
         } else {
@@ -71,6 +89,8 @@ class AddEditFirestoreViewController: UIViewController {
 //              let length = Int(lengthString),
 //              let description = descriptionTextView.text,
 //              let mpaRating = mpaRatingTextField.text,
+                let thumbnail = imageUrlTextField.text,
+               
               let criticsRatingString = criticsRatingTextField.text,
               let criticsRating = Double(criticsRatingString) else {
             print("Invalid data")
@@ -99,6 +119,7 @@ class AddEditFirestoreViewController: UIViewController {
 //                "length": length,
 //                "shortDescription": description,
 //                "mpaRating": mpaRating,
+                "thumbnail":thumbnail,
                 "criticsRating": criticsRating
             ]) { [weak self] error in
                 if let error = error {
@@ -124,6 +145,7 @@ class AddEditFirestoreViewController: UIViewController {
 //                "length": Int(length),
 //                "shortDescription": description,
 //                "mpaRating": mpaRating,
+                "thumbnail":thumbnail,
                 "criticsRating": Double(criticsRating)
             ] as [String : Any]
 
