@@ -2,9 +2,9 @@ import UIKit
 
 class MovieTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var titleLabel: UITextField!
+    @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var studioLabel: UITextField!
+    @IBOutlet weak var studioLabel: UILabel!
     
     @IBOutlet weak var ratingLabel: UITextField!
     

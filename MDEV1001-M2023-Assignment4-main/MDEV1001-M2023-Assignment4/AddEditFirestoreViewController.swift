@@ -30,17 +30,17 @@ class AddEditFirestoreViewController: UIViewController {
         
         if let movie = movie {
             // Editing existing movie
-            movieIDTextField.text = "\(movie.movieID)"
+        //    movieIDTextField.text = "\(movie.movieID)"
             titleTextField.text = movie.title
             studioTextField.text = movie.studio
-            genresTextField.text = movie.genres.joined(separator: ", ")
-            directorsTextField.text = movie.directors.joined(separator: ", ")
-            writersTextField.text = movie.writers.joined(separator: ", ")
-            actorsTextField.text = movie.actors.joined(separator: ", ")
-            lengthTextField.text = "\(movie.length)"
-            yearTextField.text = "\(movie.year)"
-            descriptionTextView.text = movie.shortDescription
-            mpaRatingTextField.text = movie.mpaRating
+//            genresTextField.text = movie.genres.joined(separator: ", ")
+//            directorsTextField.text = movie.directors.joined(separator: ", ")
+//            writersTextField.text = movie.writers.joined(separator: ", ")
+//            actorsTextField.text = movie.actors.joined(separator: ", ")
+//            lengthTextField.text = "\(movie.length)"
+//            yearTextField.text = "\(movie.year)"
+//            descriptionTextView.text = movie.shortDescription
+//            mpaRatingTextField.text = movie.mpaRating
             criticsRatingTextField.text = "\(movie.criticsRating)"
             
             AddEditTitleLabel.text = "Edit Movie"
@@ -57,20 +57,20 @@ class AddEditFirestoreViewController: UIViewController {
     
     @IBAction func UpdateButton_Pressed(_ sender: UIButton) {
         guard
-              let movieIDString = movieIDTextField.text,
-              let movieID = Int(movieIDString),
+//              let movieIDString = movieIDTextField.text,
+//              let movieID = Int(movieIDString),
               let title = titleTextField.text,
               let studio = studioTextField.text,
-              let genres = genresTextField.text,
-              let directors = directorsTextField.text,
-              let writers = writersTextField.text,
-              let actors = actorsTextField.text,
-              let yearString = yearTextField.text,
-              let year = Int(yearString),
-              let lengthString = lengthTextField.text,
-              let length = Int(lengthString),
-              let description = descriptionTextView.text,
-              let mpaRating = mpaRatingTextField.text,
+//              let genres = genresTextField.text,
+//              let directors = directorsTextField.text,
+//              let writers = writersTextField.text,
+//              let actors = actorsTextField.text,
+//              let yearString = yearTextField.text,
+//              let year = Int(yearString),
+//              let lengthString = lengthTextField.text,
+//              let length = Int(lengthString),
+//              let description = descriptionTextView.text,
+//              let mpaRating = mpaRatingTextField.text,
               let criticsRatingString = criticsRatingTextField.text,
               let criticsRating = Double(criticsRatingString) else {
             print("Invalid data")
@@ -88,17 +88,17 @@ class AddEditFirestoreViewController: UIViewController {
 
             let movieRef = db.collection("movies").document(documentID)
             movieRef.updateData([
-                "movieID": movieID,
+             //   "movieID": movieID,
                 "title": title,
                 "studio": studio,
-                "genres": genres.components(separatedBy: ", "),
-                "directors": directors.components(separatedBy: ", "),
-                "writers": writers.components(separatedBy: ", "),
-                "actors": actors.components(separatedBy: ", "),
-                "year": year,
-                "length": length,
-                "shortDescription": description,
-                "mpaRating": mpaRating,
+//                "genres": genres.components(separatedBy: ", "),
+//                "directors": directors.components(separatedBy: ", "),
+//                "writers": writers.components(separatedBy: ", "),
+//                "actors": actors.components(separatedBy: ", "),
+//                "year": year,
+//                "length": length,
+//                "shortDescription": description,
+//                "mpaRating": mpaRating,
                 "criticsRating": criticsRating
             ]) { [weak self] error in
                 if let error = error {
@@ -113,17 +113,17 @@ class AddEditFirestoreViewController: UIViewController {
         } else {
             // Add new movie
             let newMovie     = [
-                "movieID": Int(movieID),
+//                "movieID": Int(movieID),
                 "title": title,
                 "studio": studio,
-                "genres": genres.components(separatedBy: ", "),
-                "directors": directors.components(separatedBy: ", "),
-                "writers": writers.components(separatedBy: ", "),
-                "actors": actors.components(separatedBy: ", "),
-                "year": Int(year),
-                "length": Int(length),
-                "shortDescription": description,
-                "mpaRating": mpaRating,
+//                "genres": genres.components(separatedBy: ", "),
+//                "directors": directors.components(separatedBy: ", "),
+//                "writers": writers.components(separatedBy: ", "),
+//                "actors": actors.components(separatedBy: ", "),
+//                "year": Int(year),
+//                "length": Int(length),
+//                "shortDescription": description,
+//                "mpaRating": mpaRating,
                 "criticsRating": Double(criticsRating)
             ] as [String : Any]
 
