@@ -35,7 +35,6 @@ class FirebaseLoginViewController: UIViewController, UITextFieldDelegate {
         // Create a container view for padding
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 20)) // Width without padding
         containerView.addSubview(showPasswordButton)
-
         passwordTextField.rightView = containerView
         passwordTextField.rightViewMode = .always
     }
@@ -68,33 +67,35 @@ class FirebaseLoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func LoginButton_Pressed(_ sender: UIButton) {
-        guard let username = usernameTextField.text, let password = passwordTextField.text else {
-            print("Please enter both username and password.")
-            return
-        }
-
-        // Retrieve the email associated with the username
-        let db = Firestore.firestore()
-        let docRef = db.collection("usernames").document(username)
-
-        docRef.getDocument { document, error in
-            if let document = document, document.exists, let data = document.data(), let email = data["email"] as? String {
-                // Authenticate with Firebase using the retrieved email
-                Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                    if let error = error {
-                        print("Login failed: \(error.localizedDescription)")
-                        self.displayErrorMessage(message: "Authentication Failed")
-                        return
+        if usernameTextField.text != "" || passwordTextField.text != ""{
+            guard let username = usernameTextField.text, let password = passwordTextField.text else {
+                print("Please enter both username and password.")
+                return
+            }
+            
+            // Retrieve the email associated with the username
+            let db = Firestore.firestore()
+            let docRef = db.collection("usernames").document(username)
+            
+            docRef.getDocument { document, error in
+                if let document = document, document.exists, let data = document.data(), let email = data["email"] as? String {
+                    // Authenticate with Firebase using the retrieved email
+                    Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+                        if let error = error {
+                            print("Login failed: \(error.localizedDescription)")
+                            self.displayErrorMessage(message: "Authentication Failed")
+                            return
+                        }
+                        
+                        print("User logged in successfully.")
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "LoginSegue", sender: nil)
+                        }
                     }
-
-                    print("User logged in successfully.")
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "LoginSegue", sender: nil)
-                    }
+                } else {
+                    print("Username not found.")
+                    self.displayErrorMessage(message: "Authentication Failed")
                 }
-            } else {
-                print("Username not found.")
-                self.displayErrorMessage(message: "Authentication Failed")
             }
         }
     }

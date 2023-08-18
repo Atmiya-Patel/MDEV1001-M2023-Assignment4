@@ -8,19 +8,11 @@ class AddEditFirestoreViewController: UIViewController {
     @IBOutlet weak var UpdateButton: UIButton!
     
     // Movie Fields
-    @IBOutlet weak var movieIDTextField: UITextField!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var studioTextField: UITextField!
-    @IBOutlet weak var genresTextField: UITextField!
-    @IBOutlet weak var directorsTextField: UITextField!
-    @IBOutlet weak var writersTextField: UITextField!
-    @IBOutlet weak var actorsTextField: UITextField!
-    @IBOutlet weak var yearTextField: UITextField!
-    @IBOutlet weak var lengthTextField: UITextField!
-    @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var mpaRatingTextField: UITextField!
     @IBOutlet weak var criticsRatingTextField: UITextField!
     
+    @IBOutlet weak var posterImageLabel: UILabel!
     @IBOutlet weak var thumbnailImage: UIImageView!
     
     @IBOutlet weak var imageUrlTextField: UITextField!
@@ -34,38 +26,30 @@ class AddEditFirestoreViewController: UIViewController {
         
         if let movie = movie {
             // Editing existing movie
-        //    movieIDTextField.text = "\(movie.movieID)"
             titleTextField.text = movie.title
             studioTextField.text = movie.studio
-//            genresTextField.text = movie.genres.joined(separator: ", ")
-//            directorsTextField.text = movie.directors.joined(separator: ", ")
-//            writersTextField.text = movie.writers.joined(separator: ", ")
-//            actorsTextField.text = movie.actors.joined(separator: ", ")
-//            lengthTextField.text = "\(movie.length)"
-//            yearTextField.text = "\(movie.year)"
-//            descriptionTextView.text = movie.shortDescription
-//            mpaRatingTextField.text = movie.mpaRating
             criticsRatingTextField.text = "\(movie.criticsRating)"
             let url = URL(string: movie.thumbnail)!
-
-                              // Fetch Image Data
-                          
-                          DispatchQueue.global().async {
-                                  // Fetch Image Data
-                                  if let data = try? Data(contentsOf: url) {
-                                      DispatchQueue.main.async {
-                                          // Create Image and Update Image View
-                                          self.thumbnailImage.image = UIImage(data: data)
-                                      }
-                                  }
-                              }
+            DispatchQueue.global().async {
+              // Fetch Image Data
+            if let data = try? Data(contentsOf: url) {
+              DispatchQueue.main.async {
+              // Create Image and Update Image View
+             self.thumbnailImage.image = UIImage(data: data)
+                 }
+                }
+              }
 
             imageUrlTextField.text = movie.thumbnail
             AddEditTitleLabel.text = "Edit Movie"
             UpdateButton.setTitle("Update", for: .normal)
+            self.posterImageLabel.isHidden = false
+            self.thumbnailImage.isHidden = false
         } else {
             AddEditTitleLabel.text = "Add Movie"
             UpdateButton.setTitle("Add", for: .normal)
+            self.posterImageLabel.isHidden = true
+            self.thumbnailImage.isHidden = true
         }
     }
     
@@ -75,20 +59,9 @@ class AddEditFirestoreViewController: UIViewController {
     
     @IBAction func UpdateButton_Pressed(_ sender: UIButton) {
         guard
-//              let movieIDString = movieIDTextField.text,
-//              let movieID = Int(movieIDString),
               let title = titleTextField.text,
               let studio = studioTextField.text,
-//              let genres = genresTextField.text,
-//              let directors = directorsTextField.text,
-//              let writers = writersTextField.text,
-//              let actors = actorsTextField.text,
-//              let yearString = yearTextField.text,
-//              let year = Int(yearString),
-//              let lengthString = lengthTextField.text,
-//              let length = Int(lengthString),
-//              let description = descriptionTextView.text,
-//              let mpaRating = mpaRatingTextField.text,
+
                 let thumbnail = imageUrlTextField.text,
                
               let criticsRatingString = criticsRatingTextField.text,
@@ -111,14 +84,6 @@ class AddEditFirestoreViewController: UIViewController {
              //   "movieID": movieID,
                 "title": title,
                 "studio": studio,
-//                "genres": genres.components(separatedBy: ", "),
-//                "directors": directors.components(separatedBy: ", "),
-//                "writers": writers.components(separatedBy: ", "),
-//                "actors": actors.components(separatedBy: ", "),
-//                "year": year,
-//                "length": length,
-//                "shortDescription": description,
-//                "mpaRating": mpaRating,
                 "thumbnail":thumbnail,
                 "criticsRating": criticsRating
             ]) { [weak self] error in
@@ -134,17 +99,8 @@ class AddEditFirestoreViewController: UIViewController {
         } else {
             // Add new movie
             let newMovie     = [
-//                "movieID": Int(movieID),
                 "title": title,
                 "studio": studio,
-//                "genres": genres.components(separatedBy: ", "),
-//                "directors": directors.components(separatedBy: ", "),
-//                "writers": writers.components(separatedBy: ", "),
-//                "actors": actors.components(separatedBy: ", "),
-//                "year": Int(year),
-//                "length": Int(length),
-//                "shortDescription": description,
-//                "mpaRating": mpaRating,
                 "thumbnail":thumbnail,
                 "criticsRating": Double(criticsRating)
             ] as [String : Any]
@@ -154,6 +110,21 @@ class AddEditFirestoreViewController: UIViewController {
                 if let error = error {
                     print("Error adding movie: \(error)")
                 } else {
+                    if self?.imageUrlTextField.text != ""
+                    {
+                        let url = URL(string: self!.imageUrlTextField.text!)!
+                        // Fetch Image Data
+                          DispatchQueue.global().async {
+                           // Fetch Image Data
+                         if let data = try? Data(contentsOf: url) {
+                         DispatchQueue.main.async {
+                        // Create Image and Update Image View
+                          self?.thumbnailImage.image = UIImage(data: data)
+                                                  }
+                                              }
+                                          }
+                    }
+                   
                     print("Movie added successfully.")
                     self?.dismiss(animated: true) {
                         self?.movieUpdateCallback?()
